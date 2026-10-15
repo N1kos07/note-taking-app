@@ -124,7 +124,7 @@ note-taking-app/
 
 ## Interface Preview
 
-
+![Note-Taking App interface](note-taking-preview.png)
 
 *Interface preview using sample data.*
 
