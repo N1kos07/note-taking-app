@@ -1,97 +1,148 @@
-# Note Taking App
+# Note-Taking App
 
-A simple note-taking application built with Node.js, Express, MongoDB, and JavaScript.
+A full-stack note-taking web application built with Node.js, Express.js, MongoDB, and EJS.
 
+Users can sign in with their Google accounts to create, view, edit, and delete personal notes. Each note is associated with its owner, ensuring that users can only access and modify their own notes.
+
+**Curious what the application looks like?** [View the interface preview](#interface-preview) below.
 
 ## Features
 
-- Sign in with Google
-- Create notes
-- Edit existing notes
-- Delete notes
-- Save notes to MongoDB
-- Each user can see only their own notes
-- Logout functionality
-- Simple note count and note selection interface
-
+- **Google authentication:** Sign in using Google OAuth 2.0, implemented with Passport.js.
+- **Note management:** Create, view, edit, and delete notes.
+- **User-specific notes:** Each note is linked to its owner, and note operations are restricted to the authenticated user.
+- **Persistent storage:** Save notes and user information in MongoDB using Mongoose as middleware.
+- **Session management:** Maintain user sessions and support logging out.
+- **Error handling and validation:** Use Mongoose schema validation and HTTP status codes to handle invalid requests and unsuccessful operations.
+- **Interactive interface:** Display, search, and select notes through an EJS-rendered interface.
 
 ## Technologies Used
 
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-- EJS
-- JavaScript
-- HTML
-- CSS
-- Passport.js
-- Google OAuth 2.0
-- Mocha
-- Chai
+| Category       | Technologies                                   |
+| -------------- | ---------------------------------------------- |
+| Backend        | Node.js, Express.js, Javascript                |
+| Frontend       | EJS, HTML, CSS, JavaScript                     |
+| Database       | MongoDB, Mongoose                              |
+| Authentication | Passport.js, Google OAuth 2.0, Express Session |
+| Testing        | Mocha, Chai                                    |
 
+## How It Works
 
-## How to Run the Project
+1. A user signs in through Google OAuth 2.0.
+2. Passport.js authenticates the user, and the application maintains their session.
+3. The user can create, retrieve, update, or delete notes through Express routes.
+4. Mongoose handles database operations, with each note associated with a specific user.
+5. The application restricts note operations to their respective owners.
 
-1. Clone or download the project
+The backend is organized into separate **routes, controllers, and models**, making it easier to understand and maintain.
 
-2. Install the dependencies (with npm install)
+## Running the Project Locally
 
-3. Create a .env file and add the require environment variables for MongoDB, Google OAuth, and the session secret
+### Prerequisites
 
-4. Start the server (node index.js)
+- Node.js and npm
+- MongoDB connection
+- Google OAuth 2.0 credentials
 
-5. Open the application in your browser
+### Setup
 
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/N1kos07/note-taking-app.git
+   cd note-taking-app
+   ```
+
+2. Install the dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file in the project root with the following variables:
+
+   ```env
+   MONGO_URL=your_mongodb_connection_string
+   CLIENT_ID=your_google_oauth_client_id
+   CLIENT_SECRET=your_google_oauth_client_secret
+   GOOGLE_CALLBACK_URL=http://localhost:3000/auth/google/callback
+   SESSION_SECRET=your_session_secret
+   ```
+
+   Configure your Google OAuth application to use the matching callback URL. Keep actual credentials out of GitHub.
+
+4. Start the application:
+
+   ```bash
+   node index.js
+   ```
+
+5. Open `http://localhost:3000` in your browser.
 
 ## Testing
 
-Run the test with:
-- npm test
+The project includes basic automated controller tests using **Mocha and Chai**.
 
-The current tests cover basic controller validation and error handling.
+Run them with:
 
+```bash
+npm test
+```
+
+The current tests verify that the note controller returns an HTTP `400` response for three unsuccessful operations:
+
+- Creating a note with missing required content
+- Updating a note with an invalid ID
+- Deleting a note with an invalid ID
+
+These tests cover a limited set of error cases rather than the application's full functionality.
 
 ## Project Structure
 
-noteTakingApp/
+```text
+note-taking-app/
+├── config/
+│   └── passport.js
+├── controllers/
+│   └── noteController.js
+├── models/
+│   ├── Note.js
+│   └── User.js
+├── public/
+│   └── style.css
+├── routes/
+│   ├── authRoutes.js
+│   └── noteRoutes.js
+├── tests/
+│   └── noteController.test.js
+├── views/
+│   └── index.ejs
+├── index.js
+├── package.json
+└── README.md
+```
 
-    config/
-        passport.js
+## Interface Preview
 
-    controllers/
-        noteController.js
 
-    models/
-        Note.js
-        User.js
 
-    public/
-        styles.css
-
-    routes/ 
-        authRoutes.js
-        noteRoutes.js
-
-    tests/
-        noteController.test.js
-
-    views/
-        index.ejs
-
-    index.js
-    package.json
-    README.md
-
+*Interface preview using sample data.*
 
 ## Reflection
 
-This project helped me understand how the different parts of a full-stack application work together. I learned how to build REST API routes with Express, connect an application to MongoDB using Mongoose as middleware, and separate routes, controllers, and models.
+This project helped me understand how the different parts of a full-stack application work together. Before building it, I had learned many of these concepts separately, but developing a complete application gave me the opportunity to connect them and see how they work in practice.
 
-I also learned how to use EJS to render a frontend from an Express server and how frontend actions such as creating, editing, and deleting notes communicate with the backend.
+I learned how to build RESTful API endpoints with Express.js, connect an application to MongoDB using Mongoose, and organize backend logic into routes, controllers, and models. I also learned how to use EJS to render a frontend and how actions such as creating, editing, and deleting notes communicate with the backend.
 
-One of the biggest new concepts for me was authentication. I implemented Google OAuth using Passport.js and learned how sessions can keep track of a logged-in user. I also learned that authentication and data ownership are separate concepts, and I had to make sure each note was connected to the user who created it. 
+One of the biggest learning experiences for me was **authentication**. I implemented Google OAuth 2.0 using Passport.js and learned how sessions allow an application to recognize logged-in users. I also came to understand that authentication and data ownership are separate concepts: knowing who a user is doesn't automatically mean they should have access to every note. Making sure users could only access and modify their own notes was an important part of the project.
 
-I also practiced writing basic tests with Mocha and Chai, and learned how valication and error handling help make an application more reliable. 
+I also gained introductory experience writing automated tests with Mocha and Chai, implementing schema validation, and handling unsuccessful requests with appropriate HTTP responses.
 
-Overall, this project gave me a much better understanding of how a complete web application is structured and how the frontend, backend, database, authentication, and testing all work together. 
+Overall, this project gave me a much better understanding of how a complete web application is structured. More importantly, it helped me become more comfortable putting the concepts I've learned into practice, debugging problems, and understanding how the frontend, backend, database, authentication, and testing all come together.
+
+## Possible Future Improvements
+
+- Expand automated tests to cover successful operations and authentication flows.
+- Improve validation and error handling for additional edge cases.
+- Add more ways to organize notes.
+- Improve the user interface and mobile experience.
